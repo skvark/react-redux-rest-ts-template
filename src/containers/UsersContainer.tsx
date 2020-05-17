@@ -9,7 +9,7 @@ const UsersContainer: React.FC = () => {
 
   return (
     <div>
-      <button onClick={() => dispatch(userActions.get(""))}>
+      <button onClick={() => dispatch(userActions.get())}>
         Get users
       </button>
       <ul>

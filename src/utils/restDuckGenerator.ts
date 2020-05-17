@@ -28,7 +28,7 @@ export type RestState<T> = EntityState<T> & BaseState;
 
 function createRestActions<T extends BaseEntity>(entityNamePlural: string) {
   return {
-    get: createAsyncThunk<Array<T>, string>(
+    get: createAsyncThunk<Array<T>, string | undefined>(
       `${entityNamePlural}/getAll`,
       async (queryParams) => {
         let query = "";
