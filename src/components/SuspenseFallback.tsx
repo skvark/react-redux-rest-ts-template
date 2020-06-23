@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const SuspenseFallback: React.FC = () =>  (
+const SuspenseFallback: React.FC = () => (
   <span>Suspended. Loading data...</span>
 );
 

@@ -1,4 +1,5 @@
 import createRestDuck from "../utils/restDuckGenerator";
+import { RootState } from "../app/store";
 
 export interface User {
   id: string;
@@ -8,6 +9,14 @@ export interface User {
   avatar: string;
 }
 
-const { reducer, actions } = createRestDuck<User>("users");
+const { reducer, adapter, actions } = createRestDuck<User>("users");
 
-export { reducer, actions };
+export const {
+  selectById: selectUserById,
+  selectIds: selectUserIds,
+  selectEntities: selectUserEntities,
+  selectAll: selectAllUsers,
+  selectTotal: selectTotalUsers,
+} = adapter.getSelectors((state: RootState) => state.users);
+
+export { reducer, actions, adapter };

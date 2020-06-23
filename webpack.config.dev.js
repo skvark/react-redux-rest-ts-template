@@ -14,6 +14,16 @@ module.exports = (env) =>
       compress: true,
       port: 3000,
       publicPath: "/",
+      historyApiFallback: true
+    },
+
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: ["style-loader", "css-loader"],
+        },
+      ]
     },
 
     plugins: [new ReactRefreshWebpackPlugin()],

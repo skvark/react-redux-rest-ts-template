@@ -10,15 +10,16 @@ module.exports = (env) => merge(common(env), {
   mode: "production",
   output: {
     path: path.join(__dirname, "/dist"),
-    filename: "[hash].bundle.js",
+    filename: "[chunkhash].bundle.js",
+    chunkFilename: "[chunkhash].bundle.js",
   },
   optimization: {
     minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css",
+      filename: '[chunkhash].css',
+      chunkFilename: '[chunkhash].css',
     }),
   ],
   module: {

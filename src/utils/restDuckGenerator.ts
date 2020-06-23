@@ -2,7 +2,7 @@ import {
   createEntityAdapter,
   createSlice,
   createAsyncThunk,
-  EntityState
+  EntityState,
 } from "@reduxjs/toolkit";
 
 import * as Api from "../api/api";
@@ -150,6 +150,7 @@ export default function createRestDuck<T extends BaseEntity>(
 
   return {
     reducer: slice.reducer,
-    actions: { ...slice.actions, ...restActions }
+    adapter: adapter,
+    actions: { ...slice.actions, ...restActions },
   };
 }

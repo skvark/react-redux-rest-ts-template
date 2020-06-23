@@ -6,22 +6,15 @@ const ForkTsCheckerNotifierWebpackPlugin = require("fork-ts-checker-notifier-web
 
 const selectConfig = (env) => {
   const configs = require("./config.json");
-  let config;
-  switch (env) {
-    case "LOCAL":
-      config = configs.LOCAL;
-      break;
-    case "DEV":
-      config = configs.DEV;
-      break;
-    case "QA":
-      config = configs.QA;
-      break;
-    case "PROD":
-      config = configs.PROD;
-      break;
-    default:
-      config = configs.LOCAL;
+  let config = configs.LOCAL;
+  if (env.DEV) {
+    config = configs.DEV;
+  }
+  if (env.QA) {
+    config = configs.QA;
+  }
+  if (env.PROD) {
+    config = configs.PROD;
   }
   return JSON.stringify(config);
 };
@@ -31,12 +24,14 @@ module.exports = (env) => {
 
   return {
     entry: {
-      main: path.join(__dirname, "/src/index.tsx"),
+      main: path.join(__dirname, "/src/index.tsx")
     },
 
     output: {
       path: path.join(__dirname, "/dist"),
       filename: "[name].bundle.js",
+      chunkFilename: '[name].bundle.js',
+      publicPath: '/',
     },
 
     resolve: {
@@ -52,9 +47,13 @@ module.exports = (env) => {
           use: "babel-loader",
         },
         {
-          test: /\.css$/,
-          use: ["style-loader", "css-loader"],
+          test: /\.(gif|jpg|png)$/,
+          loader: 'file-loader',
         },
+        {
+          test: /\.svg$/,
+          use: ['@svgr/webpack', 'url-loader'],
+        }
       ],
     },
 
@@ -64,7 +63,8 @@ module.exports = (env) => {
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: path.join(__dirname, "/src/templates/index.html"),
-      }),
+        chunks: ['main']
+      })
     ],
 
     externals: {
