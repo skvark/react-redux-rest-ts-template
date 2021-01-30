@@ -1,19 +1,20 @@
-const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const ForkTsCheckerNotifierWebpackPlugin = require("fork-ts-checker-notifier-webpack-plugin");
+const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 
-const selectConfig = (env) => {
-  const configs = require("./config.json");
+const selectConfig = () => {
+  const configs = require('./config.json');
+  const build = process.env.BUILD;
   let config = configs.LOCAL;
-  if (env.DEV) {
+  if (build === 'dev') {
     config = configs.DEV;
   }
-  if (env.QA) {
+  if (build === 'qa') {
     config = configs.QA;
   }
-  if (env.PROD) {
+  if (build === 'prod') {
     config = configs.PROD;
   }
   return JSON.stringify(config);
@@ -24,18 +25,18 @@ module.exports = (env) => {
 
   return {
     entry: {
-      main: path.join(__dirname, "/src/index.tsx")
+      main: path.join(__dirname, '/src/index.tsx')
     },
 
     output: {
-      path: path.join(__dirname, "/dist"),
-      filename: "[name].bundle.js",
+      path: path.join(__dirname, '/dist'),
+      filename: '[name].bundle.js',
       chunkFilename: '[name].bundle.js',
-      publicPath: '/',
+      publicPath: '/'
     },
 
     resolve: {
-      extensions: [".ts", ".tsx", ".js"],
+      extensions: ['.ts', '.tsx', '.js']
     },
 
     module: {
@@ -43,32 +44,34 @@ module.exports = (env) => {
         {
           test: /\.(ts|js)x?$/,
           exclude: /node_modules/,
-          include: path.join(__dirname, "src"),
-          use: "babel-loader",
+          include: path.join(__dirname, 'src'),
+          use: 'babel-loader'
         },
         {
           test: /\.(gif|jpg|png)$/,
-          loader: 'file-loader',
+          loader: 'file-loader'
         },
         {
           test: /\.svg$/,
-          use: ['@svgr/webpack', 'url-loader'],
+          use: ['@svgr/webpack', 'url-loader']
         }
-      ],
+      ]
     },
 
     plugins: [
-      new ForkTsCheckerWebpackPlugin(),
+      new ForkTsCheckerWebpackPlugin({
+        eslint: {
+          files: './src/**/*.{ts,tsx,js,jsx}'
+        }
+      }),
       new ForkTsCheckerNotifierWebpackPlugin(),
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, "/src/templates/index.html"),
-        chunks: ['main']
+        template: path.join(__dirname, '/src/templates/index.html')
       })
     ],
-
     externals: {
-      config: config,
-    },
+      config: config
+    }
   };
 };

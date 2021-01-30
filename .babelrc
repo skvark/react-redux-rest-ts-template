@@ -5,7 +5,7 @@
       {
         "useBuiltIns": "entry",
         "corejs": 3, // default would be 2
-        "targets": "> 0.25%, not dead" 
+        "targets": "> 0.25%, not dead"
       }
     ],
     "@babel/preset-typescript",
@@ -14,7 +14,7 @@
   "plugins": [
     "@babel/plugin-transform-runtime",
     "@babel/proposal-class-properties",
-    "@babel/proposal-object-rest-spread",
+    "@babel/proposal-object-rest-spread"
   ],
   "env": {
     "development": {

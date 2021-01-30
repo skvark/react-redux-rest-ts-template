@@ -1,5 +1,5 @@
-import createRestDuck from "../utils/restDuckGenerator";
-import { RootState } from "../app/store";
+import createRestDuck from '../utils/restDuckGenerator';
+import { RootState } from '../app/store';
 
 export interface User {
   id: string;
@@ -9,14 +9,14 @@ export interface User {
   avatar: string;
 }
 
-const { reducer, adapter, actions } = createRestDuck<User>("users");
+const { reducer, adapter, actions } = createRestDuck<User>('users');
 
 export const {
   selectById: selectUserById,
   selectIds: selectUserIds,
   selectEntities: selectUserEntities,
   selectAll: selectAllUsers,
-  selectTotal: selectTotalUsers,
+  selectTotal: selectTotalUsers
 } = adapter.getSelectors((state: RootState) => state.users);
 
 export { reducer, actions, adapter };

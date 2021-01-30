@@ -1,11 +1,6 @@
-import {
-  createEntityAdapter,
-  createSlice,
-  createAsyncThunk,
-  EntityState,
-} from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, createAsyncThunk, EntityState } from '@reduxjs/toolkit';
 
-import * as Api from "../api/api";
+import * as Api from '../api';
 
 // Please refer to https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk
 // for more information about the typing of createAsyncThunk & other parts of RTK
@@ -28,51 +23,34 @@ export type RestState<T> = EntityState<T> & BaseState;
 
 function createRestActions<T extends BaseEntity>(entityNamePlural: string) {
   return {
-    get: createAsyncThunk<Array<T>, string | undefined>(
-      `${entityNamePlural}/getAll`,
-      async (queryParams) => {
-        let query = "";
-        if (queryParams !== "") {
-          query = `?${queryParams}`;
-        }
-        return (await Api.get<T>(`${entityNamePlural}${query}`)) as Array<T>;
+    get: createAsyncThunk<T[], string | undefined>(`${entityNamePlural}/getAll`, async (queryParams = '') => {
+      let query = '';
+      if (queryParams !== '') {
+        query = `?${queryParams}`;
       }
-    ),
+      return (await Api.get<T>(`${entityNamePlural}${query}`)) as T[];
+    }),
 
-    getOne: createAsyncThunk<T, string | number>(
-      `${entityNamePlural}/getOne`,
-      async (id) => {
-        return (await Api.get<T>(`${entityNamePlural}/${id}`)) as T;
-      }
-    ),
+    getOne: createAsyncThunk<T, string | number>(`${entityNamePlural}/getOne`, async (id) => {
+      return (await Api.get<T>(`${entityNamePlural}/${id}`)) as T;
+    }),
 
-    create: createAsyncThunk<T, T>(
-      `${entityNamePlural}/create`,
-      async (data) => {
-        return (await Api.post(entityNamePlural, data)) as T;
-      }
-    ),
+    create: createAsyncThunk<T, T>(`${entityNamePlural}/create`, async (data) => {
+      return (await Api.post(entityNamePlural, data)) as T;
+    }),
 
-    update: createAsyncThunk<T, T>(
-      `${entityNamePlural}/update`,
-      async (data) => {
-        return (await Api.put(`${entityNamePlural}/${data.id}`, data)) as T;
-      }
-    ),
+    update: createAsyncThunk<T, T>(`${entityNamePlural}/update`, async (data) => {
+      return (await Api.put(`${entityNamePlural}/${data.id}`, data)) as T;
+    }),
 
-    remove: createAsyncThunk<string | number, string | number>(
-      `${entityNamePlural}/remove`,
-      async (id) => {
-        await Api.remove<T>(`${entityNamePlural}/${id}`);
-        return id;
-      }
-    ),
+    remove: createAsyncThunk<string | number, string | number>(`${entityNamePlural}/remove`, async (id) => {
+      await Api.remove<T>(`${entityNamePlural}/${id}`);
+      return id;
+    })
   };
 }
 
-export default function createRestDuck<T extends BaseEntity>(
-  entityNamePlural: string
-) {
+export default function createRestDuck<T extends BaseEntity>(entityNamePlural: string) {
   const adapter = createEntityAdapter<T>();
 
   const initialState = adapter.getInitialState({
@@ -80,7 +58,7 @@ export default function createRestDuck<T extends BaseEntity>(
     isFetchingMany: false,
     isUpdating: false,
     isDeleting: false,
-    isCreating: false,
+    isCreating: false
   });
 
   const restActions = createRestActions<T>(entityNamePlural);
@@ -145,12 +123,12 @@ export default function createRestDuck<T extends BaseEntity>(
       builder.addCase(restActions.remove.rejected, (state, _) => {
         state.isDeleting = false;
       });
-    },
+    }
   });
 
   return {
     reducer: slice.reducer,
     adapter: adapter,
-    actions: { ...slice.actions, ...restActions },
+    actions: { ...slice.actions, ...restActions }
   };
 }

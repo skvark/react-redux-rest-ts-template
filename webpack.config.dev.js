@@ -1,19 +1,22 @@
 const { merge } = require('webpack-merge');
-const common = require("./webpack.config.common.js");
-const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const common = require('./webpack.config.common.js');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = (env) =>
   merge(common(env), {
-    mode: "development",
-    devtool: "inline-source-map",
+    mode: 'development',
+    devtool: 'inline-source-map',
 
     devServer: {
-      contentBase: "./dist",
-      hot: true,
+      static: './dist',
       open: true,
       compress: true,
       port: 3000,
-      publicPath: "/",
+      host: 'localhost',
+      hot: true,
+      dev: {
+        publicPath: '/'
+      },
       historyApiFallback: true
     },
 
@@ -21,10 +24,10 @@ module.exports = (env) =>
       rules: [
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"],
-        },
+          use: ['style-loader', 'css-loader']
+        }
       ]
     },
 
-    plugins: [new ReactRefreshWebpackPlugin()],
+    plugins: [new ReactRefreshWebpackPlugin()]
   });

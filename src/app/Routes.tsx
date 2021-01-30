@@ -1,18 +1,18 @@
-import React, { lazy, Suspense } from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import SuspenseFallback from "../components/SuspenseFallback";
+import SuspenseFallback from '../components/SuspenseFallback';
 
-const UsersContainer = lazy(() => import("../containers/UsersContainer"));
+const UsersContainer = lazy(async () => await import('../containers/UsersContainer'));
 
-const Routes: React.FC = () => {
+const Router: React.FC = () => {
   return (
     <Suspense fallback={<SuspenseFallback />}>
-      <Switch>
-        <Route path="/" component={UsersContainer} />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<UsersContainer />} />
+      </Routes>
     </Suspense>
   );
 };
 
-export default Routes;
+export default Router;

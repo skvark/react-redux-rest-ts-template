@@ -1,4 +1,4 @@
-declare module "config" {
+declare module 'config' {
   export interface Config {
     API_URL: string;
   }

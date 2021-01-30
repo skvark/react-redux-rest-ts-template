@@ -1,14 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { useAppDispatch, useTypedSelector } from "../app/store";
-import { actions as userActions, selectAllUsers } from "../ducks/usersDuck";
+import { useAppDispatch, useTypedSelector } from '../app/store';
+import { actions as userActions, selectAllUsers } from '../ducks/usersDuck';
 
 const UsersContainer: React.FC = () => {
   const dispatch = useAppDispatch();
   const users = useTypedSelector(selectAllUsers);
 
   useEffect(() => {
-    dispatch(userActions.get());
+    const promise = dispatch(userActions.get());
+    return () => {
+      promise.abort();
+    };
   }, []);
 
   return (

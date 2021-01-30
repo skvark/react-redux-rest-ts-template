@@ -1,15 +1,9 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import { Reducer } from "redux";
+import { combineReducers } from '@reduxjs/toolkit';
+import { reducer as usersReducer } from '../ducks/usersDuck';
 
-import { History, Location } from "history";
-import { connectRouter, RouterState } from "connected-react-router";
-
-import { reducer as usersReducer } from "../ducks/usersDuck";
-
-const rootReducer = (history: History) =>
+const rootReducer = () =>
   combineReducers({
-    users: usersReducer,
-    router: connectRouter(history) as Reducer<RouterState<Location>>,
+    users: usersReducer
   });
 
 export default rootReducer;

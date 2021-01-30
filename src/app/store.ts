@@ -1,38 +1,35 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { createBrowserHistory } from "history";
-import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { createBrowserHistory } from 'history';
+import { useSelector, useDispatch, TypedUseSelectorHook } from 'react-redux';
 
-import rootReducer from "./rootReducer";
-import { routerMiddleware as createRouterMiddleware } from "connected-react-router";
+import rootReducer from './rootReducer';
 
 declare const module: any;
 
 export const history = createBrowserHistory();
-const root = rootReducer(history);
+const root = rootReducer();
 
 export type RootState = ReturnType<typeof root>;
 
 // Construct middleware list before configureStore call.
 // Couldn't get this to work correctly directly in store middleware params
 // because types were inferred incorrectly
-let middlewares = [...getDefaultMiddleware<RootState>()];
+const middlewares = [...getDefaultMiddleware<RootState>()];
 
-// @ts-ignore
-if (process.env.NODE_ENV === "development") {
-  const { logger } = require(`redux-logger`);
+if (process.env.NODE_ENV === 'development') {
+  const { logger } = require('redux-logger');
   middlewares.push(logger);
 }
 
-middlewares.push(createRouterMiddleware(history));
-
 const store = configureStore({
   reducer: root,
-  middleware: middlewares,
+  middleware: middlewares
 });
 
-if (process.env.NODE_ENV === "development" && module.hot) {
-  module.hot.accept("./rootReducer", () => {
-    const newRootReducer = require("./rootReducer").default;
+// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./rootReducer', () => {
+    const newRootReducer = require('./rootReducer').default;
     store.replaceReducer(newRootReducer);
   });
 }
