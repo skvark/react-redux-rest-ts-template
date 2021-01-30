@@ -2,7 +2,7 @@
 
 Project template for React projects which interact with RESTful APIs. The template includes basic setup for Webpack, TypeScript and Redux. There are also some helper functions to reduce boilerplate code to minimum. Hot reload is enabled in development mode.
 
-This template should handle most average sized and aösp larger React projects. There are only a few dependencies and the resulting bundle size is quite small. You can throw your favorite UI framework (I recommend Material UI) and / or CSS-in-JS solution to the mix.
+This template should handle most average sized and also larger React projects. There are only a few dependencies and the resulting bundle size is quite small. You can throw your favorite UI framework (I recommend Material UI) and / or CSS-in-JS solution to the mix.
 
 ## Getting started
 
