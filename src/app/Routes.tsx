@@ -1,18 +1,29 @@
-import React, { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { createRoutesFromElements, Route } from 'react-router-dom';
+import { ComponentType, lazy, LazyExoticComponent, PropsWithoutRef, Suspense } from 'react';
 
 import SuspenseFallback from '../components/SuspenseFallback';
 
-const UsersContainer = lazy(async () => await import('../containers/UsersContainer'));
-
-const Router: React.FC = () => {
-  return (
-    <Suspense fallback={<SuspenseFallback />}>
-      <Routes>
-        <Route path="/" element={<UsersContainer />} />
-      </Routes>
-    </Suspense>
-  );
+type ComponentWithDisplayName = {
+  displayName?: string;
 };
 
-export default Router;
+const suspensed = <P extends object>(Component: LazyExoticComponent<ComponentType<P>> & ComponentWithDisplayName) => {
+  const SuspensedComponent = (props: PropsWithoutRef<P>) => (
+    <Suspense fallback={<SuspenseFallback />}>
+      <Component {...props} />
+    </Suspense>
+  );
+
+  // Safely set the display name
+  SuspensedComponent.displayName = `Suspensed(${Component.displayName || Component.name || 'Component'})`;
+
+  return SuspensedComponent;
+};
+
+const UsersContainer = suspensed(lazy(() => import('#/containers/ObjectsContainer')));
+
+export default createRoutesFromElements(
+  <>
+    <Route path="/" element={<UsersContainer />} />
+  </>
+);

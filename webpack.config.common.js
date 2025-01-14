@@ -1,8 +1,5 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 
 const selectConfig = () => {
   const configs = require('./config.json');
@@ -20,56 +17,60 @@ const selectConfig = () => {
   return JSON.stringify(config);
 };
 
-module.exports = (env) => {
+module.exports = env => {
   const config = selectConfig(env);
 
   return {
-    entry: {
-      main: path.join(__dirname, '/src/index.tsx')
-    },
+    entry: path.join(__dirname, '/src/index.tsx'),
 
     output: {
-      path: path.join(__dirname, '/dist'),
-      filename: '[name].bundle.js',
-      chunkFilename: '[name].bundle.js',
-      publicPath: '/'
+      publicPath: '/',
+      clean: true
     },
 
     resolve: {
-      extensions: ['.ts', '.tsx', '.js']
+      alias: {
+        '#': path.join(__dirname, '/src')
+      },
+      extensions: ['.ts', '.tsx', '.js', '...']
     },
+
+    target: 'web',
 
     module: {
       rules: [
         {
           test: /\.(ts|js)x?$/,
           exclude: /node_modules/,
-          include: path.join(__dirname, 'src'),
+          include: path.join(__dirname, '/src'),
           use: 'babel-loader'
         },
         {
           test: /\.(gif|jpg|png)$/,
-          loader: 'file-loader'
+          type: 'asset/resource'
         },
         {
-          test: /\.svg$/,
-          use: ['@svgr/webpack', 'url-loader']
+          test: /\.svg$/i,
+          type: 'asset',
+          resourceQuery: /url/ // *.svg?url
+        },
+        {
+          test: /\.svg$/i,
+          issuer: /\.[jt]sx?$/,
+          resourceQuery: { not: [/url/] }, // *.svg
+          use: ['@svgr/webpack']
         }
       ]
     },
 
     plugins: [
-      new ForkTsCheckerWebpackPlugin({
-        eslint: {
-          files: './src/**/*.{ts,tsx,js,jsx}'
-        }
-      }),
-      new ForkTsCheckerNotifierWebpackPlugin(),
-      new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, '/src/templates/index.html')
+        template: path.join(__dirname, '/src/templates/index.html'),
+        favicon: path.join(__dirname, '/src/assets/icons/favicon.ico'),
+        inject: 'body'
       })
     ],
+
     externals: {
       config: config
     }

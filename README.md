@@ -2,7 +2,7 @@
 
 Project template for React projects which interact with RESTful APIs. The template includes basic setup for Webpack, TypeScript and Redux. There are also some helper functions to reduce boilerplate code to minimum. Hot reload is enabled in development mode.
 
-This template should handle most average sized and also larger React projects. There are only a few dependencies and the resulting bundle size is quite small. You can throw your favorite UI framework (I recommend Material UI) and / or CSS-in-JS solution to the mix.
+This template should handle most average sized and also larger React projects. There are only a few dependencies and the resulting bundle size is quite small. You can throw your favorite UI framework and / or CSS-in-JS solution to the mix.
 
 ## Getting started
 
@@ -18,7 +18,7 @@ A basic example should start at http://localhost:3000.
 
 Webpack configurations can be found from the `webpack.*` files in the root of the project. There is a common config which is merged either with development config (local development) or with production config (other environments).
 
-You can define environment related variables in the `config.json` file. Currently, environment specific API urls are defined there.
+You can define environment related variables in the `config.json` file. Environment specific API urls are defined there.
 
 Babel is configured via the `.babelrc` file.
 

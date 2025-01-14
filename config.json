@@ -1,6 +1,6 @@
 {
   "LOCAL": {
-    "API_URL": "https://reqres.in/api/"
+    "API_URL": "https://api.restful-api.dev/"
   },
   "DEV": {
     "API_URL": ""

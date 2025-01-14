@@ -1,9 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { reducer as usersReducer } from '../ducks/usersDuck';
+import { reducer as objectsReducer } from '../ducks/objectsDuck';
 
-const rootReducer = () =>
-  combineReducers({
-    users: usersReducer
-  });
+const rootReducer = combineReducers({
+  objects: objectsReducer
+});
 
 export default rootReducer;

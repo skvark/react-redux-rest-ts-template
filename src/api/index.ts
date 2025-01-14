@@ -1,10 +1,5 @@
 import config from 'config';
 
-interface RestAPIReply<T> {
-  message: object;
-  data: T | T[];
-}
-
 const apiFetch = async <T>(endpoint: string, method: string, body?: T): Promise<T | T[] | string> => {
   const headers = new Headers({
     'Content-Type': 'application/json',
@@ -25,12 +20,12 @@ const apiFetch = async <T>(endpoint: string, method: string, body?: T): Promise<
     }
 
     try {
-      return ((await res.json()) as RestAPIReply<T>).data;
+      return (await res.json()) as T;
     } catch {
       return await res.text();
     }
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as string);
   }
 };
 

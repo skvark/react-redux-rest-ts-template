@@ -19,7 +19,7 @@ export interface BaseState {
   isCreating: boolean;
 }
 
-export type RestState<T> = EntityState<T> & BaseState;
+export type RestState<T> = EntityState<T, string> & BaseState;
 
 function createRestActions<T extends BaseEntity>(entityNamePlural: string) {
   return {
@@ -65,7 +65,7 @@ export default function createRestDuck<T extends BaseEntity>(entityNamePlural: s
 
   const slice = createSlice({
     name: entityNamePlural,
-    initialState: initialState as RestState<T>,
+    initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
       builder.addCase(restActions.get.pending, (state, _) => {
@@ -74,7 +74,7 @@ export default function createRestDuck<T extends BaseEntity>(entityNamePlural: s
       builder.addCase(restActions.get.fulfilled, (state, action) => {
         state.isFetchingMany = false;
         // using only "state" here leads to TypeScript error
-        adapter.setAll(state as RestState<T>, action.payload);
+        adapter.setAll(state, action.payload);
       });
       builder.addCase(restActions.get.rejected, (state, _) => {
         state.isFetchingMany = false;
@@ -85,7 +85,7 @@ export default function createRestDuck<T extends BaseEntity>(entityNamePlural: s
       });
       builder.addCase(restActions.getOne.fulfilled, (state, action) => {
         state.isFetchingOne = false;
-        adapter.upsertOne(state as RestState<T>, action.payload);
+        adapter.upsertOne(state, action.payload);
       });
       builder.addCase(restActions.getOne.rejected, (state, _) => {
         state.isFetchingOne = false;
@@ -96,7 +96,7 @@ export default function createRestDuck<T extends BaseEntity>(entityNamePlural: s
       });
       builder.addCase(restActions.create.fulfilled, (state, action) => {
         state.isCreating = false;
-        adapter.upsertOne(state as RestState<T>, action.payload);
+        adapter.upsertOne(state, action.payload);
       });
       builder.addCase(restActions.create.rejected, (state, _) => {
         state.isCreating = false;
@@ -107,7 +107,7 @@ export default function createRestDuck<T extends BaseEntity>(entityNamePlural: s
       });
       builder.addCase(restActions.update.fulfilled, (state, action) => {
         state.isUpdating = false;
-        adapter.upsertOne(state as RestState<T>, action.payload);
+        adapter.upsertOne(state, action.payload);
       });
       builder.addCase(restActions.update.rejected, (state, _) => {
         state.isUpdating = false;
@@ -118,7 +118,7 @@ export default function createRestDuck<T extends BaseEntity>(entityNamePlural: s
       });
       builder.addCase(restActions.remove.fulfilled, (state, action) => {
         state.isDeleting = false;
-        adapter.removeOne(state as RestState<T>, action.payload);
+        adapter.removeOne(state, action.payload);
       });
       builder.addCase(restActions.remove.rejected, (state, _) => {
         state.isDeleting = false;

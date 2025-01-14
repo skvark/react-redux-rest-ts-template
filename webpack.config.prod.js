@@ -12,23 +12,40 @@ module.exports = (env) =>
     output: {
       path: path.join(__dirname, '/dist'),
       filename: '[chunkhash].bundle.js',
-      chunkFilename: '[chunkhash].bundle.js'
+      chunkFilename: '[chunkhash].chunk.js',
+      clean: true
     },
     optimization: {
-      minimizer: [new TerserJSPlugin({}), new CssMinimizerPlugin()]
+      minimizer: [
+        new TerserJSPlugin({
+          parallel: true
+        }),
+        new CssMinimizerPlugin()
+      ]
+    },
+    runtimeChunk: {
+      name: 'runtime'
+    },
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                url: false // Required as image imports should be handled via JS/TS import statements
+              }
+            }
+          ]
+        }
+      ]
     },
     plugins: [
       new MiniCssExtractPlugin({
         filename: '[chunkhash].css',
         chunkFilename: '[chunkhash].css'
       })
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader']
-        }
-      ]
-    }
+    ]
   });
